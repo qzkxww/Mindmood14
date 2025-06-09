@@ -525,17 +525,6 @@ export default function OnboardingScreen() {
                           )}
                         </View>
                       </View>
-                      {isSelected && (
-                        <Animated.View 
-                          style={[
-                            styles.selectedIndicator,
-                            isEnergyQuestion && { backgroundColor: option.color }
-                          ]}
-                          entering={FadeIn.duration(200)}
-                        >
-                          <ChevronRight size={16} color="#ffffff" />
-                        </Animated.View>
-                      )}
                     </TouchableOpacity>
                   </Animated.View>
                 );
@@ -700,17 +689,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     color: '#64748b',
     lineHeight: 20,
-  },
-  selectedIndicator: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
-    width: 28,
-    height: 28,
-    backgroundColor: '#3b82f6',
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   footer: {
     paddingHorizontal: 24,
