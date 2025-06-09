@@ -425,27 +425,31 @@ export default function OnboardingScreen() {
   return (
     <LinearGradient colors={['#f8fafc', '#e2e8f0']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.header}>
-          <TouchableOpacity 
-            onPress={handleBack} 
-            style={[styles.backButton, { opacity: currentQuestion === 0 ? 0.3 : 1 }]}
-            disabled={currentQuestion === 0 || isTransitioning}
-          >
-            <ChevronLeft size={24} color="#64748b" />
-          </TouchableOpacity>
-          
-          <View style={styles.progressSection}>
-            <Text style={styles.progressText}>
-              {currentQuestion + 1} of {questions.length}
-            </Text>
-            <View style={styles.progressBarContainer}>
-              <View style={styles.progressTrack}>
-                <Animated.View style={[styles.progressFill, animatedProgressStyle]} />
+        {/* Fixed Header with Progress Bar */}
+        <View style={styles.fixedHeader}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity 
+              onPress={handleBack} 
+              style={[styles.backButton, { opacity: currentQuestion === 0 ? 0.3 : 1 }]}
+              disabled={currentQuestion === 0 || isTransitioning}
+            >
+              <ChevronLeft size={24} color="#64748b" />
+            </TouchableOpacity>
+            
+            <View style={styles.progressSection}>
+              <Text style={styles.progressText}>
+                {currentQuestion + 1} of {questions.length}
+              </Text>
+              <View style={styles.progressBarContainer}>
+                <View style={styles.progressTrack}>
+                  <Animated.View style={[styles.progressFill, animatedProgressStyle]} />
+                </View>
               </View>
             </View>
           </View>
         </View>
 
+        {/* Scrollable Content */}
         <Animated.View style={[styles.contentContainer, animatedContentStyle]}>
           <ScrollView 
             style={styles.scrollContainer}
@@ -540,6 +544,7 @@ export default function OnboardingScreen() {
           </ScrollView>
         </Animated.View>
 
+        {/* Fixed Footer */}
         <View style={styles.footer}>
           <TouchableOpacity
             style={[
@@ -565,11 +570,18 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  header: {
+  fixedHeader: {
+    backgroundColor: '#f8fafc',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e2e8f0',
+    paddingBottom: 16,
+    zIndex: 10,
+  },
+  headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingTop: 16,
     gap: 16,
   },
   backButton: {
@@ -618,7 +630,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 24,
-    paddingTop: 16,
+    paddingTop: 32,
     paddingBottom: 24,
   },
   questionContainer: {
