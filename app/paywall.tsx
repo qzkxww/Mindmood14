@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Brain, TrendingUp, Calendar, Target, Check } from 'lucide-react-native';
+import { Brain, TrendingUp, Calendar, Target } from 'lucide-react-native';
 import Animated, { 
   FadeIn, 
   Layout,
@@ -99,14 +99,6 @@ export default function PaywallScreen() {
                     </View>
                   </View>
                   <Text style={styles.planDescription}>Best value - $5.00/month</Text>
-                  {selectedPlan === 'yearly' && (
-                    <Animated.View 
-                      style={styles.checkIcon}
-                      entering={FadeIn.duration(200)}
-                    >
-                      <Check size={20} color="#3b82f6" />
-                    </Animated.View>
-                  )}
                 </TouchableOpacity>
               </Animated.View>
 
@@ -125,14 +117,6 @@ export default function PaywallScreen() {
                     </View>
                   </View>
                   <Text style={styles.planDescription}>Flexible monthly billing</Text>
-                  {selectedPlan === 'monthly' && (
-                    <Animated.View 
-                      style={styles.checkIcon}
-                      entering={FadeIn.duration(200)}
-                    >
-                      <Check size={20} color="#3b82f6" />
-                    </Animated.View>
-                  )}
                 </TouchableOpacity>
               </Animated.View>
             </View>
@@ -284,19 +268,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Inter-Regular',
     color: '#64748b',
-  },
-  checkIcon: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    width: 24,
-    height: 24,
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#3b82f6',
   },
   footer: {
     paddingHorizontal: 24,
