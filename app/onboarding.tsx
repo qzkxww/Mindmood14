@@ -122,6 +122,7 @@ export default function OnboardingScreen() {
   const contentOpacity = useSharedValue(1);
   const contentTranslateY = useSharedValue(0);
   const questionScale = useSharedValue(1);
+  const progressWidth = useSharedValue(((currentQuestion + 1) / questions.length) * 100);
   
   // Loading screen animations
   const loadingProgress = useSharedValue(0);
@@ -147,7 +148,21 @@ export default function OnboardingScreen() {
       duration: 500,
       easing: Easing.out(Easing.cubic),
     });
+
+    // Initialize progress bar
+    progressWidth.value = withTiming(((currentQuestion + 1) / questions.length) * 100, {
+      duration: 600,
+      easing: Easing.out(Easing.cubic),
+    });
   }, []);
+
+  // Update progress bar when question changes
+  useEffect(() => {
+    progressWidth.value = withTiming(((currentQuestion + 1) / questions.length) * 100, {
+      duration: 600,
+      easing: Easing.out(Easing.cubic),
+    });
+  }, [currentQuestion]);
 
   // Loading screen animations
   useEffect(() => {
@@ -310,16 +325,22 @@ export default function OnboardingScreen() {
     };
   });
 
+  const animatedProgressStyle = useAnimatedStyle(() => {
+    return {
+      width: `${progressWidth.value}%`,
+    };
+  });
+
   const animatedLoadingStyle = useAnimatedStyle(() => {
     return {
       transform: [{ scale: loadingScale.value }],
     };
   });
 
-  const animatedProgressStyle = useAnimatedStyle(() => {
-    const progressWidth = interpolate(loadingProgress.value, [0, 1], [0, 100]);
+  const animatedLoadingProgressStyle = useAnimatedStyle(() => {
+    const progressWidthValue = interpolate(loadingProgress.value, [0, 1], [0, 100]);
     return {
-      width: `${progressWidth}%`,
+      width: `${progressWidthValue}%`,
     };
   });
 
@@ -376,9 +397,9 @@ export default function OnboardingScreen() {
             <View style={styles.loadingContent}>
               <Text style={styles.loadingTitle}>Setting things{'\n'}up for you...</Text>
               
-              <View style={styles.progressContainer}>
-                <View style={styles.progressTrack}>
-                  <Animated.View style={[styles.progressBar, animatedProgressStyle]}>
+              <View style={styles.loadingProgressContainer}>
+                <View style={styles.loadingProgressTrack}>
+                  <Animated.View style={[styles.loadingProgressBar, animatedLoadingProgressStyle]}>
                     <LinearGradient
                       colors={['#A855F7', '#06B6D4', '#10B981']}
                       start={{ x: 0, y: 0 }}
@@ -413,20 +434,14 @@ export default function OnboardingScreen() {
             <ChevronLeft size={24} color="#64748b" />
           </TouchableOpacity>
           
-          <View style={styles.progressContainer}>
-            <Text style={styles.progress}>
+          <View style={styles.progressSection}>
+            <Text style={styles.progressText}>
               {currentQuestion + 1} of {questions.length}
             </Text>
-            <View style={styles.progressBar}>
-              <Animated.View 
-                style={[
-                  styles.progressFill, 
-                  { 
-                    width: `${((currentQuestion + 1) / questions.length) * 100}%`,
-                  }
-                ]}
-                layout={Layout.springify().damping(20).stiffness(90)}
-              />
+            <View style={styles.progressBarContainer}>
+              <View style={styles.progressTrack}>
+                <Animated.View style={[styles.progressFill, animatedProgressStyle]} />
+              </View>
             </View>
           </View>
         </View>
@@ -567,29 +582,33 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-  progressContainer: {
+  progressSection: {
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: 20,
   },
-  progress: {
+  progressText: {
     fontSize: 14,
     fontFamily: 'Inter-Medium',
     color: '#64748b',
-    marginBottom: 8,
+    marginBottom: 12,
     textAlign: 'center',
   },
-  progressBar: {
+  progressBarContainer: {
     width: '100%',
-    height: 4,
+    alignItems: 'center',
+  },
+  progressTrack: {
+    width: '100%',
+    height: 8,
     backgroundColor: '#e2e8f0',
-    borderRadius: 2,
+    borderRadius: 4,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
     backgroundColor: '#3b82f6',
-    borderRadius: 2,
+    borderRadius: 4,
   },
   contentContainer: {
     flex: 1,
@@ -733,18 +752,18 @@ const styles = StyleSheet.create({
     marginBottom: 64,
     lineHeight: 40,
   },
-  progressContainer: {
+  loadingProgressContainer: {
     width: '100%',
     marginBottom: 48,
   },
-  progressTrack: {
+  loadingProgressTrack: {
     width: '100%',
     height: 8,
     backgroundColor: '#F1F5F9',
     borderRadius: 4,
     overflow: 'hidden',
   },
-  progressBar: {
+  loadingProgressBar: {
     height: '100%',
     borderRadius: 4,
     overflow: 'hidden',
