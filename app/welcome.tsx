@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Dimensions, Mod
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Moon, Sun, Globe, X, Mail } from 'lucide-react-native';
+import { useAuth } from '@/hooks/useAuth';
 import Animated, { 
   useSharedValue, 
   useAnimatedStyle, 
@@ -19,9 +20,17 @@ const { width, height } = Dimensions.get('window');
 
 export default function WelcomeScreen() {
   const router = useRouter();
+  const { user, loading, signIn: authSignIn } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState('EN');
   const [showSignInModal, setShowSignInModal] = useState(false);
+
+  // Redirect if user is already authenticated
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace('/(tabs)');
+    }
+  }, [user, loading]);
 
   // Animation values
   const pulseScale = useSharedValue(1);
@@ -109,13 +118,13 @@ export default function WelcomeScreen() {
     });
   };
 
-  const handleAppleSignIn = () => {
+  const handleAppleSignIn = async () => {
     // In a real app, implement Apple Sign In
     handleCloseModal();
     router.push('/(tabs)');
   };
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignIn = async () => {
     // In a real app, implement Google Sign In
     handleCloseModal();
     router.push('/(tabs)');
@@ -134,6 +143,17 @@ export default function WelcomeScreen() {
   const toggleLanguage = () => {
     setLanguage(language === 'EN' ? 'ES' : 'EN');
   };
+
+  // Show loading while checking auth state
+  if (loading) {
+    return (
+      <View style={[styles.container, { backgroundColor: '#ffffff' }]}>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </View>
+    );
+  }
 
   const theme = {
     background: isDarkMode ? '#0f172a' : '#ffffff',
@@ -446,6 +466,16 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+    fontFamily: 'Inter-Medium',
+    color: '#64748b',
   },
   header: {
     flexDirection: 'row',
