@@ -437,9 +437,6 @@ export default function OnboardingScreen() {
             </TouchableOpacity>
             
             <View style={styles.progressSection}>
-              <Text style={styles.progressText}>
-                {currentQuestion + 1} of {questions.length}
-              </Text>
               <View style={styles.progressBarContainer}>
                 <View style={styles.progressTrack}>
                   <Animated.View style={[styles.progressFill, animatedProgressStyle]} />
@@ -563,14 +560,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8fafc',
     borderBottomWidth: 1,
     borderBottomColor: '#e2e8f0',
-    paddingBottom: 16,
+    paddingBottom: 12,
     zIndex: 10,
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 12,
     gap: 16,
   },
   backButton: {
@@ -587,13 +584,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: 20,
-  },
-  progressText: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#64748b',
-    marginBottom: 12,
-    textAlign: 'center',
   },
   progressBarContainer: {
     width: '100%',
